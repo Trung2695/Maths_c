@@ -1,0 +1,76 @@
+#include <stdlib.h>
+#include <stdio.h>
+int pow_10(int n) {
+	if (n = 0) {
+		return (1);
+	}
+	if (n > 0) {
+		return (pow_10(n - 1) * 10);
+	}
+}
+
+double		check_float_convert(char *input){
+	int	deci = 0;
+	double fin = 0.0;
+	int	i = 0;
+
+	while (*input){
+		if ((*input > '9' || *input < '0') && (*input != '.'){
+			printf("Invalid input");
+			return (0);
+		}
+		else if (*input == '.' && deci == 0) {
+			deci = 1;
+				input++;
+		}
+		else if (*input == '.' && deci == 1) {
+			printf("Invalid input");
+				return (0);
+		}
+		else{
+			if (deci == 0){
+				while (*input && *input <= '9' && *input >= '0' && deci == 0) {
+					fin = fin * 10 + (*input - '0');
+					input++;
+				}
+			}
+			else {
+				while (*input && *input <= '9' && *input >= '0') {
+					fin = fin * 10 + (*input - '0');
+					i++;
+					input++;
+				}
+			}
+		}
+	}
+	return (fin / pow_10(i);
+}
+/*
+int		seperate(char *input)
+{
+	int	real = 0;
+	int pl_mn = 0;
+	int im = 0;
+	int pt = 0;
+
+	while(input)
+}
+void	parse_input(char **input, char **av){
+	int	i = 0;
+	while (i < 3){
+		input[i] = av[i];
+		i++;
+	}
+}
+*/
+int		main(int ac, char **av){
+//	if (ac != 4){
+//		printf("Incorrect number of arguements. The format is \"x\" \"+\" \"y\" with x, y in a complex format, i.e. a+ib no spaces and a, b in float.")
+//	}
+	
+//	char **input;
+//	input = malloc{sizeof(char*) * 3};
+//	parse_input(input, av)
+	printf("%f", check_float_convert(av[1]));
+	return (ac);
+}
