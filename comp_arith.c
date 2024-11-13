@@ -61,7 +61,7 @@ comp	*ft_div(comp *in_1, comp *in_2){
 comp	*operation(comp	*(*func)(comp*, comp*), comp *in_1, comp *in_2){
 	return (func(in_1, in_2));
 }
-
+//Seg fault when doing cases but not when functions are directly called...
 int	main(int ac, char **av){
 	comp	*result;
 	comp	*(*func)(comp*, comp*);	
