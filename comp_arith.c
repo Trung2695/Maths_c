@@ -66,10 +66,21 @@ int	main(int ac, char **av){
 	comp	*result;
 	comp	*(*func)(comp*, comp*);	
 	if (ac != 2){
-		printf("Too many arguements!");
+		printf("Wrong number of arguements!");
 		return (-1);
 	}
-
+	if (*av[1] == '+'){
+		func = &ft_add;
+	}
+	else if (*av[1] == '*'){
+		func = &ft_mult;
+	}
+	else if (*av[1] == '-'){
+		func = &ft_minus;
+	}
+	else if (*av[1] == '/'){
+		func = &ft_div;
+	}
 	comp in_1;
 	comp in_2;
 
@@ -81,19 +92,7 @@ int	main(int ac, char **av){
 	scanf("%lf", &in_2.real);
 	printf("Please provide the imaginary part of the 2nd complex number: \n");
 	scanf("%lf", &in_2.im);
-
-	if (av[1] == "+"){
-		func = &ft_add;
-	}
-	else if (av[1] == "*"){
-		func = &ft_mult;
-	}
-	else if (av[1] == "-"){
-		func = &ft_minus;
-	}
-	else if (av[1] == "/"){
-		func = &ft_div;
-	}
+	
 
 	result = func(&in_1, &in_2);
 
