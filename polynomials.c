@@ -52,7 +52,7 @@ double	ft_atod(char* input){
 	int	i = 0;
 	int	mark = 1;
 	int	sign = 1;
-	int	power = 10;
+	double	power = 10;
 	double	sum = 0;
 	if (input[i] == '-'){
 		sign = -1;
@@ -98,13 +98,13 @@ poly ft_poly_mult(poly *poly_1, poly *poly_2){
 	int	i = 0;
 	int	j = 0;
 	poly	result;
-	result.coef = malloc(sizeof(double) * deg);
+	result.coef = calloc(deg, sizeof(double));
 	if (result.coef == NULL){
 		printf("Malloc failed at poly mult");
 		return (result);
 	}
 	result.deg = deg;
-	while (i < deg+1){
+	while (i < deg){
 		j = 0;
 		if (poly_1->deg <= poly_2->deg){
 			while (j < poly_2->deg){
@@ -136,33 +136,47 @@ int	main(int ac, char **av){
 	char	*input = av[1];
 	char	*input_2 = av[2];
 	char	**temp_poly;
-	int	deg;
 	int	i = 0;
 	poly	poly_1;
 	poly	poly_2;
 	poly	result;
 
-//	printf("Please provide the coefficients of the first polynomial (starting from the lowest degree), seperated by space:");
+//	printf("Please provide ALL the coefficients of the first polynomial (starting from degree 0), seperated by space:");
 //	scanf("%s", input);
+	
 	ft_poly_init(&poly_1, ft_count(input));
 	temp_poly = ft_split(input, poly_1.deg);
 	poly_1.coef = ft_convert(temp_poly, poly_1.deg);
-//	printf("Please provide the coefficients of the second polynomial (starting from the lowest degree), seperated by space:");
+
+//	printf("Please provide ALL the coefficients of the second polynomial (starting from degree 0), seperated by space:");
 //	scanf("%s", input_2);
-	ft_poly_init(&poly_2, ft_count(input_2));	
+	
+	ft_poly_init(&poly_2, ft_count(input_2));
 	temp_poly = ft_split(input_2, poly_2.deg);
 	poly_2.coef = ft_convert(temp_poly, poly_2.deg);
+
+
+	free(temp_poly);
+
 	result = ft_poly_mult(&poly_1, &poly_2);
+	
+	free(poly_1.coef);
+	free(poly_2.coef);
+
 	while (i < result.deg){
 		if (i == 0){
-			printf("%f", result.coef[i]);
-			i++;
+			printf("%f\n", result.coef[i]);
+		}
+		else if (result.coef[i] < 0 && i != 0){
+			printf("%f x^%d\n", result.coef[i], i);
 		}
 		else {
-			printf(" + %f x^%d", result.coef[i], i);
-			i++;
+			printf("+%f x^%d\n", result.coef[i], i);
 		}
+		i++;
 	}
+
+	free(result.coef);
 	return (ac);
 }
 
