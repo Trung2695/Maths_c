@@ -25,6 +25,10 @@ int	ft_strlen(char* input){
 
 char	**ft_split(char* input, int distinct){
 	char	**output = malloc(sizeof(char*) * distinct);
+	if (output == NULL){
+		printf("Malloc failed at split");
+		return (output);
+	}
 	int	i = 0;
 	int	j = 0;
 	int	k = 0;
@@ -58,11 +62,11 @@ double	ft_atod(char* input){
 		if (input[i] == '.'){
 			mark = -1;
 		}
-		else if (mark = 1){
+		else if (mark == 1){
 			sum = sum * 10 + input[i] - '0';
 		}
 		else if (mark == -1){
-			sum = sum + input[i]/power;
+			sum = sum + (input[i] - '0')/power;
 			power = power * 10;	
 		}
 		i++;
@@ -71,7 +75,11 @@ double	ft_atod(char* input){
 }
 
 double	*ft_convert(char** input, int distinct){
-	double	*result = malloc(sizeof(int) * distinct);
+	double	*result = malloc(sizeof(double) * distinct);
+	if (result == NULL){
+		printf("Malloc failed at convert");
+		return (result);
+	}
 	int	i = 0;
 	while (i < distinct){
 		result[i] = ft_atod(input[i]);
@@ -91,14 +99,21 @@ poly ft_poly_mult(poly *poly_1, poly *poly_2){
 	int	j = 0;
 	poly	result;
 	result.coef = malloc(sizeof(double) * deg);
+	if (result.coef == NULL){
+		printf("Malloc failed at poly mult");
+		return (result);
+	}
 	result.deg = deg;
 	while (i < deg+1){
-		if (i == 0){
-			result.coef[0] = poly_1->coef[0] * poly_2->coef[0];
+		j = 0;
+		if (poly_1->deg <= poly_2->deg){
+			while (j < poly_2->deg){
+				result.coef[i] = result.coef[i] + poly_1->coef[i-j] * poly_2->coef[j];
+				j++;
+			}
 		}
 		else {
-			j = 0;
-			while (j < i + 1){
+			while (j < poly_1->deg){
 				result.coef[i] = result.coef[i] + poly_1->coef[j] * poly_2->coef[i-j];
 				j++;
 			}
@@ -110,6 +125,9 @@ poly ft_poly_mult(poly *poly_1, poly *poly_2){
 
 void	ft_poly_init(poly *input, int deg){
 	input->coef = malloc(sizeof(double) * deg);
+	if (input->coef == NULL){
+		printf("Malloc failed at init");
+	}
 	input->deg = deg;
 }
 
@@ -123,23 +141,32 @@ int	main(int ac, char **av){
 	poly	poly_1;
 	poly	poly_2;
 	poly	result;
+
 //	printf("Please provide the coefficients of the first polynomial (starting from the lowest degree), seperated by space:");
 //	scanf("%s", input);
 	ft_poly_init(&poly_1, ft_count(input));
 	temp_poly = ft_split(input, poly_1.deg);
 	poly_1.coef = ft_convert(temp_poly, poly_1.deg);
 //	printf("Please provide the coefficients of the second polynomial (starting from the lowest degree), seperated by space:");
-//	scanf("%s", input);
+//	scanf("%s", input_2);
 	ft_poly_init(&poly_2, ft_count(input_2));	
 	temp_poly = ft_split(input_2, poly_2.deg);
 	poly_2.coef = ft_convert(temp_poly, poly_2.deg);
 	result = ft_poly_mult(&poly_1, &poly_2);
 	while (i < result.deg){
-		printf("%f", result.coef[i]);
-		i++;
+		if (i == 0){
+			printf("%f", result.coef[i]);
+			i++;
+		}
+		else {
+			printf(" + %f x^%d", result.coef[i], i);
+			i++;
+		}
 	}
 	return (ac);
 }
+
+
 
 
 
