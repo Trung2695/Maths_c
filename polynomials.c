@@ -104,19 +104,11 @@ poly ft_poly_mult(poly *poly_1, poly *poly_2){
 		return (result);
 	}
 	result.deg = deg;
-	while (i < deg){
+	while (i < poly_1->deg){
 		j = 0;
-		if (poly_1->deg <= poly_2->deg){
-			while (j < poly_2->deg){
-				result.coef[i] = result.coef[i] + poly_1->coef[i-j] * poly_2->coef[j];
-				j++;
-			}
-		}
-		else {
-			while (j < poly_1->deg){
-				result.coef[i] = result.coef[i] + poly_1->coef[j] * poly_2->coef[i-j];
-				j++;
-			}
+		while (j < poly_2->deg){
+			result.coef[i+j] = result.coef[i+j] + poly_1->coef[i] * poly_2->coef[j];
+			j++;
 		}
 		i++;
 	}
@@ -147,6 +139,12 @@ int	main(int ac, char **av){
 	ft_poly_init(&poly_1, ft_count(input));
 	temp_poly = ft_split(input, poly_1.deg);
 	poly_1.coef = ft_convert(temp_poly, poly_1.deg);
+	
+	while (i < poly_1.deg){
+		free(temp_poly[i]);
+		i++;
+	}
+	free(temp_poly);
 
 //	printf("Please provide ALL the coefficients of the second polynomial (starting from degree 0), seperated by space:");
 //	scanf("%s", input_2);
@@ -155,14 +153,19 @@ int	main(int ac, char **av){
 	temp_poly = ft_split(input_2, poly_2.deg);
 	poly_2.coef = ft_convert(temp_poly, poly_2.deg);
 
-
+	i = 0;
+	while (i < poly_2.deg){
+		free(temp_poly[i]);
+		i++;
+	}
 	free(temp_poly);
 
 	result = ft_poly_mult(&poly_1, &poly_2);
 	
 	free(poly_1.coef);
 	free(poly_2.coef);
-
+	
+	i = 0;
 	while (i < result.deg){
 		if (i == 0){
 			printf("%f\n", result.coef[i]);
